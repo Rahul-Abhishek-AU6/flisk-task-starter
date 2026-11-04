@@ -1,18 +1,27 @@
-# Flisk task starter
+# Polyglot Voting Application
 
-A small multi-service app for the Flisk Sales Architect task: a Python voting
-front end, a Node.js results page, a .NET worker, Redis and Postgres, started
-today with `docker compose up`.
+Local five-service application runtime configured with Flisk.
 
-Your job (Part 1 of the task): make it start with one `flisk up`.
+## Quickstart
 
-1. Press **Fork** on GitHub to create your own public copy. Do not open
-   issues or pull requests here.
-2. In your copy, run `npx @flisk-sh/flisk import . --dry-run`, then the same
-   without `--dry-run`, then `flisk up`. You need Docker running.
-3. Replace this README with yours: how to start it with `flisk up`, and what
-   was hard.
+Run the stack locally:
 
-The full task, the rules and the self-check are on the task page you were sent.
+```bash
+npx @flisk-sh/flisk up
+```
 
-Licence: Apache 2.0, see LICENSE and NOTICE. Keep both files in your copy.
+Service endpoints after startup:
+- Vote interface: http://localhost/api/vote
+- Results interface: http://localhost/api/result
+
+Inspect stack health, Traefik routes, and container statuses:
+
+```bash
+npx @flisk-sh/flisk doctor
+npx @flisk-sh/flisk networks
+```
+
+## What was hard
+Translating Docker Compose host port mappings required manual adjustments because Flisk routes public web traffic through Traefik instead of publishing raw container ports to the host interface.
+The result service uses Node inspection on port 9229 alongside the HTTP server, which needed container entrypoint overrides so nodemon debug flags stayed intact without breaking internal networking.
+The .NET worker depends on both Postgres and Redis readiness probes, so startup ordering had to wait for database socket initialization rather than just container boot status.
