@@ -1,0 +1,17 @@
+{
+  "$schema": "https://flisk.sh/schema.service.json",
+  "schemaVersion": 1,
+  "appName": "vote",
+  "appType": "bring-your-own",
+  "stack": "flisk-task-starter",
+  "port": 80,
+  "healthCheckPath": "/",
+  "buildContext": "../../../vote",
+  "dockerfile": "Dockerfile",
+  "dependsOn": [
+    {
+      "name": "redis",
+      "condition": "service_healthy"
+    }
+  ]
+}
