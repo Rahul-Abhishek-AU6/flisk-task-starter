@@ -1,0 +1,21 @@
+{
+  "$schema": "https://flisk.sh/schema.service.json",
+  "schemaVersion": 1,
+  "appName": "worker",
+  "appType": "bring-your-own",
+  "stack": "flisk-task-starter",
+  "port": 4000,
+  "exposeViaProxy": false,
+  "buildContext": "../../../worker",
+  "dockerfile": "Dockerfile",
+  "dependsOn": [
+    {
+      "name": "redis",
+      "condition": "service_healthy"
+    },
+    {
+      "name": "db",
+      "condition": "service_healthy"
+    }
+  ]
+}
